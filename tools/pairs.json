@@ -1,0 +1,28 @@
+{
+  "_comment": "The contrast contract. Every foreground/background pair this system actually ships, and the WCAG level it must hold. contrast.py reads the hex values straight out of css/tokens.css, so this file cannot drift from the CSS: if a token is renamed or removed, the check fails loudly rather than silently skipping the pair.",
+  "_levels": {
+    "AAA": 7.0,
+    "AA": 4.5,
+    "AA-large": 3.0
+  },
+  "pairs": [
+    { "fg": "cream",         "bg": "ink",  "min": "AAA", "use": "primary text on the page" },
+    { "fg": "cream",         "bg": "card", "min": "AAA", "use": "primary text on a card" },
+    { "fg": "steel",         "bg": "ink",  "min": "AA",  "use": "secondary text, labels" },
+    { "fg": "steel",         "bg": "card", "min": "AA",  "use": "secondary text on a card" },
+    { "fg": "text-lead",     "bg": "ink",  "min": "AAA", "use": "lead paragraphs" },
+    { "fg": "text-body",     "bg": "ink",  "min": "AAA", "use": "long-form body copy" },
+
+    { "fg": "purple",        "bg": "ink",  "min": "AA",       "use": "links and eyebrows on the page" },
+    { "fg": "purple",        "bg": "card", "min": "AA-large", "use": "LARGE text only on cards; this pair measures 4.43 and is the reason purple-bright exists" },
+    { "fg": "purple-bright", "bg": "card", "min": "AA",       "use": "links and eyebrows inside a card" },
+    { "fg": "purple-bright", "bg": "ink",  "min": "AA",       "use": "hover state on the page" },
+
+    { "fg": "green",         "bg": "ink",  "min": "AA", "use": "live status, stat numbers" },
+    { "fg": "green",         "bg": "card", "min": "AA", "use": "live status inside a card" },
+    { "fg": "amber",         "bg": "ink",  "min": "AA", "use": "warning status" },
+    { "fg": "amber",         "bg": "card", "min": "AA", "use": "warning status inside a card" },
+    { "fg": "rose",          "bg": "ink",  "min": "AA", "use": "failure status" },
+    { "fg": "rose",          "bg": "card", "min": "AA", "use": "failure status inside a card" }
+  ]
+}

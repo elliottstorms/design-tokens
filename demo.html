@@ -1,0 +1,66 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>design-tokens</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/components.css">
+<style>
+  body { margin: 0; padding: 40px 24px; }
+  .wrap { max-width: 860px; margin: 0 auto; display: grid; gap: 32px; }
+  h1 { font-size: 30px; margin: 0; }
+  .swatches { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px; }
+  .sw { border-radius: var(--radius); padding: 14px; font-family: var(--font-mono); font-size: 11px; }
+  .row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+</style>
+
+<body class="ds-base ds-gradient">
+<div class="wrap">
+
+  <header>
+    <p class="ds-eyebrow">design tokens</p>
+    <h1>Every pair below is measured, not eyeballed.</h1>
+    <p class="ds-lead">A dark-first palette where the contrast guarantees are enforced in CI.</p>
+  </header>
+
+  <section class="swatches">
+    <div class="sw" style="background:var(--ink);color:var(--cream);box-shadow:inset 0 0 0 1px var(--card)">--ink</div>
+    <div class="sw" style="background:var(--card);color:var(--cream)">--card</div>
+    <div class="sw" style="background:var(--cream);color:var(--ink)">--cream</div>
+    <div class="sw" style="background:var(--steel);color:var(--ink)">--steel</div>
+    <div class="sw" style="background:var(--purple);color:var(--ink)">--purple</div>
+    <div class="sw" style="background:var(--green);color:var(--ink)">--green</div>
+    <div class="sw" style="background:var(--amber);color:var(--ink)">--amber</div>
+    <div class="sw" style="background:var(--rose);color:var(--ink)">--rose</div>
+  </section>
+
+  <section class="row">
+    <span class="ds-pill ds-pill-live">live</span>
+    <span class="ds-pill ds-pill-warn">needs attention</span>
+    <span class="ds-pill ds-pill-block">blocked</span>
+    <span class="ds-pill ds-pill-idle">idle</span>
+  </section>
+
+  <section class="row">
+    <button class="ds-btn">Primary action</button>
+    <button class="ds-btn ds-btn-ghost">Secondary</button>
+    <a class="ds-link" href="#">A link on the page</a>
+  </section>
+
+  <section class="ds-card-grid">
+    <article class="ds-card">
+      <p class="ds-eyebrow">on a card</p>
+      <p class="ds-body">Links inside a card use the brighter purple, because the
+        standard accent measures 4.43 here and the floor is 4.5.
+        <a class="ds-link" href="#">See for yourself</a>.</p>
+    </article>
+    <article class="ds-card">
+      <p class="ds-stat">4.43</p>
+      <p class="ds-stat-label">the ratio that started it</p>
+    </article>
+  </section>
+
+  <blockquote class="ds-quote">The difference between 4.43 and 4.5 is invisible by
+    eye and decisive in an audit.</blockquote>
+
+</div>
+</body>

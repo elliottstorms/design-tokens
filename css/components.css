@@ -1,0 +1,156 @@
+/* components.css - the small set of components the tokens were derived from.
+   Prefixed `ds-` so they can drop into an existing stylesheet without a naming
+   fight. Every value here comes from tokens.css: if you find a hardcoded hex or
+   a one-off radius below, it is a bug, not a special case. */
+
+/* ---- base ---------------------------------------------------------------- */
+
+.ds-base {
+  background: var(--ink);
+  color: var(--cream);
+  font-family: var(--font-display);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* The page gradient. Four stops rather than two, because a straight linear fade
+   between navy and black bands visibly on wide displays. */
+.ds-gradient {
+  background:
+    linear-gradient(180deg,
+      var(--ink)       0%,
+      var(--grad-mid)  30%,
+      var(--grad-deep) 55%,
+      var(--grad-mid)  78%,
+      var(--ink)       100%);
+}
+
+/* ---- eyebrow ------------------------------------------------------------
+   The most recognizable cue in the system: a mono, letterspaced label with a
+   comment-slash prefix. Purple on ink measures 5.18, so it passes at any size
+   here. On a card, use the -on-card variant. */
+
+.ds-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--purple);
+}
+.ds-eyebrow::before { content: "// "; color: var(--steel); }
+
+.ds-card .ds-eyebrow,
+.ds-eyebrow-on-card { color: var(--purple-bright); }  /* 4.43 -> 5.61 */
+
+/* ---- card ---------------------------------------------------------------- */
+
+.ds-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: var(--pad-card);
+  box-shadow: var(--shadow);
+  transition: transform var(--ease), box-shadow var(--ease);
+}
+.ds-card:hover {
+  transform: var(--lift);
+  box-shadow: 0 14px 38px rgba(0, 0, 0, .45);
+}
+
+.ds-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--gap);
+}
+
+/* ---- buttons ------------------------------------------------------------
+   Purple fill with ink text, rather than purple text on a surface: the fill
+   inverts the contrast problem instead of inheriting it. */
+
+.ds-btn {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 15px;
+  padding: 11px 22px;
+  border: 0;
+  border-radius: var(--radius);
+  background: var(--purple);
+  color: var(--ink);
+  cursor: pointer;
+  transition: transform var(--ease), background var(--ease);
+}
+.ds-btn:hover { background: var(--purple-bright); transform: var(--lift); }
+
+.ds-btn-ghost {
+  background: transparent;
+  color: var(--cream);
+  box-shadow: inset 0 0 0 1px var(--steel);
+}
+.ds-btn-ghost:hover { background: var(--card); color: var(--cream); }
+
+/* Focus is never removed, only restyled. An outline the same color as the
+   accent disappears against it, so focus uses cream with an offset. */
+.ds-btn:focus-visible,
+.ds-link:focus-visible,
+.ds-pill:focus-visible {
+  outline: 2px solid var(--cream);
+  outline-offset: 3px;
+}
+
+/* ---- status pills -------------------------------------------------------
+   Tinted background plus full-strength text. A solid green pill with dark text
+   would pass contrast and still read as a button, which is the wrong affordance
+   for something you cannot click. */
+
+.ds-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: .04em;
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+}
+.ds-pill::before {
+  content: "";
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.ds-pill-live  { color: var(--green); background: rgba(74, 255, 158, .12); }
+.ds-pill-warn  { color: var(--amber); background: rgba(255, 200, 107, .12); }
+.ds-pill-block { color: var(--rose);  background: rgba(255, 107, 138, .12); }
+.ds-pill-idle  { color: var(--steel); background: rgba(146, 162, 196, .12); }
+
+/* ---- links --------------------------------------------------------------- */
+
+.ds-link {
+  color: var(--purple);
+  text-decoration-color: rgba(185, 92, 255, .45);
+  text-underline-offset: 3px;
+  transition: color var(--ease);
+}
+.ds-link:hover { color: var(--purple-bright); text-decoration-color: currentColor; }
+.ds-card .ds-link { color: var(--purple-bright); }   /* the 4.43 case again */
+
+/* ---- data ---------------------------------------------------------------
+   Numbers are mono and green; their labels are steel. Green earns its second
+   role here and nowhere else. */
+
+.ds-stat       { font-family: var(--font-mono); font-size: 30px; color: var(--green); }
+.ds-stat-label { font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em;
+                 text-transform: uppercase; color: var(--steel); }
+
+/* ---- prose --------------------------------------------------------------- */
+
+.ds-lead { color: var(--text-lead); font-size: 19px; line-height: 1.55; }
+.ds-body { color: var(--text-body); font-size: 16px; line-height: 1.7; max-width: 68ch; }
+.ds-quote {
+  font-family: var(--font-serif);
+  font-size: 20px;
+  line-height: 1.5;
+  color: var(--cream);
+  border-left: 3px solid var(--purple);
+  padding-left: 18px;
+}

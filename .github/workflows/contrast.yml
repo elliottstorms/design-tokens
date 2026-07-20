@@ -1,0 +1,24 @@
+name: contrast
+on: [push, pull_request]
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.x' }
+      # The whole promise of this repo: if a token changes and a shipped pair
+      # drops below the level it advertises, the build fails here.
+      - name: every shipped pair meets its promised level
+        run: python3 tools/contrast.py --all
+      # And the gate itself must still be able to fail. A checker that always
+      # passes is indistinguishable from no checker at all.
+      - name: the gate can still fail
+        run: |
+          cp css/tokens.css /tmp/tokens.bak
+          sed -i 's/--purple-bright: #c879ff/--purple-bright: #6a3d8f/' css/tokens.css
+          if python3 tools/contrast.py > /dev/null 2>&1; then
+            echo "gate passed a deliberately broken token"; exit 1
+          fi
+          cp /tmp/tokens.bak css/tokens.css
+          echo "gate correctly rejected a broken token"
