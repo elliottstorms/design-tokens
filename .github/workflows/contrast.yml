@@ -11,9 +11,15 @@ jobs:
       # drops below the level it advertises, the build fails here.
       - name: every shipped pair meets its promised level
         run: python3 tools/contrast.py --all
+      # And the ratio numbers written into the token comments must still be the
+      # measured ones. The pair gate only proves a color clears its threshold; a
+      # hex can move, stay above that threshold, and leave "15.95 on ink" quietly
+      # wrong. This keeps the documented numbers honest.
+      - name: the documented ratios match the measured ones
+        run: python3 tools/contrast.py --annotations
       # And the gate itself must still be able to fail. A checker that always
       # passes is indistinguishable from no checker at all.
-      - name: the gate can still fail
+      - name: the pair gate can still fail
         run: |
           cp css/tokens.css /tmp/tokens.bak
           sed -i 's/--purple-bright: #c879ff/--purple-bright: #6a3d8f/' css/tokens.css
@@ -22,3 +28,17 @@ jobs:
           fi
           cp /tmp/tokens.bak css/tokens.css
           echo "gate correctly rejected a broken token"
+      # The annotation gate must fail on the case the pair gate cannot see: a
+      # hex that stays above its level but no longer measures what the comment
+      # claims. #f6f0eb -> #eee7e0 keeps --cream at AAA on both surfaces, so the
+      # pair gate passes it; the stated 15.95/13.65 are now wrong and must be
+      # caught here.
+      - name: the annotation gate catches a ratio drifting under its threshold
+        run: |
+          cp css/tokens.css /tmp/tokens.bak
+          sed -i 's/--cream:     #f6f0eb;/--cream:     #eee7e0;/' css/tokens.css
+          if python3 tools/contrast.py --annotations > /dev/null 2>&1; then
+            echo "annotation gate passed a stale ratio comment"; exit 1
+          fi
+          cp /tmp/tokens.bak css/tokens.css
+          echo "annotation gate correctly rejected a stale ratio comment"
