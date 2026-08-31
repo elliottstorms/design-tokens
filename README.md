@@ -33,10 +33,10 @@ python3 tools/contrast.py     # exits 1 if any shipped pair drops below its prom
 
 | Path | What it is |
 |---|---|
-| `css/tokens.css` | The palette, type, rhythm, and motion tokens. Every color is annotated with its measured ratio on both surfaces. |
+| `css/tokens.css` | The palette, type, rhythm, and motion tokens. Every color is annotated with its measured ratio on both surfaces, and those annotations are checked in CI (see below), so they cannot quietly go stale. |
 | `css/components.css` | The components the tokens were derived from: cards, buttons, status pills, eyebrows, stats, prose. No hardcoded values. |
 | `tools/pairs.json` | The contract: every foreground/background pair that actually ships, and the WCAG level it must hold. |
-| `tools/contrast.py` | Reads the hex values out of `tokens.css`, measures every pair, exits nonzero on any regression. Stdlib only. |
+| `tools/contrast.py` | Reads the hex values out of `tokens.css`, measures every pair, exits nonzero on any regression. `--annotations` additionally verifies the ratio numbers written into the token comments. Stdlib only. |
 | `demo.html` | Everything on one page. Open it in a browser, no build step. |
 
 ## Use it
@@ -80,6 +80,17 @@ Note that `--purple` on `--card` is listed at AA-large deliberately. It is not a
 failure being waved through: it is a documented restriction to headings and
 large text, with `--purple-bright` carrying everything smaller. A contract that
 records real limits is more useful than one that pretends they do not exist.
+
+### Two gates, because passing is not the same claim as accurate
+
+The pair gate (`tools/contrast.py`) proves every shipped color still clears the
+level it advertises. That is not the same as proving the specific number a
+comment claims. A hex can move, stay above its threshold, and leave `15.95 on
+ink` quietly wrong: the pair still passes, but the documentation is now fiction.
+`tools/contrast.py --annotations` closes that gap by parsing the ratio numbers
+back out of the `tokens.css` comments and failing if any one disagrees with the
+measured value. Both gates run in CI, and both are tested against a deliberately
+broken token so a checker that always passes cannot slip in.
 
 ## Opinions embedded in the values
 
